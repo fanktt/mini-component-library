@@ -8,47 +8,61 @@ import VisuallyHidden from "../VisuallyHidden"
 const ProgressBar = ({ value, size }) => {
   const SIZE = {
     large: {
-      height: 24,
-      padding: 4,
-      borderRadius: 8,
+      height: "16px",
+      padding: "4px",
+      borderRadius: "8px",
     },
     medium: {
-      height: 12,
+      height: "12px",
       padding: 0,
-      borderRadius: 4,
+      borderRadius: "4px",
     },
     small: {
-      height: 8,
+      height: "8px",
       padding: 0,
-      borderRadius: 4,
+      borderRadius: "4px",
     },
   }
-  const style = SIZE[size]
+  const styles = SIZE[size]
   return (
-    <Wrapper style={style}>
+    <Wrapper
+      role="meter"
+      aria-valuenow={value}
+      aria-valuemin="0"
+      aria-valuemax="100"
+      style={{
+        "--padding": styles.padding,
+        "--radius": styles.borderRadius,
+      }}
+    >
       <VisuallyHidden>{value}%</VisuallyHidden>
-      <Progress
-        role="meter"
-        aria-valuenow={value}
-        aria-valuemin="0"
-        aria-valuemax="100"
-        value={value}
-      ></Progress>
+      <ProgressWrapper>
+        <Progress
+          style={{ "--width": `${value}%`, height: styles.height }}
+        ></Progress>
+      </ProgressWrapper>
     </Wrapper>
   )
 }
 
 const Wrapper = styled.div`
-  width: 370px;
   background: ${COLORS.transparentGray15};
-  box-shadow: inset 0px 2px 4px hsla(0, 0%, 50%, 0.35);
+  box-shadow: inset 0px 2px 4px ${COLORS.transparentGray35};
+  padding: var(--padding);
+  border-radius: var(--radius);
+`
+
+const ProgressWrapper = styled.div`
+  border-radius: 4px;
+  /* For Progress's border-radius */
+  overflow: hidden;
 `
 
 const Progress = styled.div`
   background: ${COLORS.primary};
-  width: ${(props) => props.value + "%"};
-  height: 100%;
-  border-radius: ${(props) => (props.value < 100 ? "4px 0 0 4px " : "4px")};
+  width: var(--width);
+  height: var(--height);
+  border-radius: 4px 0 0 4px;
 `
 
 export default ProgressBar
