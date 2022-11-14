@@ -9,37 +9,48 @@ const Select = ({ label, value, onChange, children }) => {
   const displayedValue = getDisplayedValue(value, children)
 
   return (
-    <SelectWrapper>
-      <TextWrapper>{displayedValue}</TextWrapper>
-      <Icon id="chevron-down" strokeWidth="2"></Icon>
+    <Wrapper>
       <RealSelect value={value} onChange={onChange}>
         {children}
       </RealSelect>
-    </SelectWrapper>
+      <SelectWrapper>
+        <TextWrapper>{displayedValue}</TextWrapper>
+        <Icon id="chevron-down" strokeWidth={2} size={24}></Icon>
+      </SelectWrapper>
+    </Wrapper>
   )
 }
 
+const Wrapper = styled.div`
+  position: relative;
+  width: max-content;
+`
+
 const RealSelect = styled.select`
   position: absolute;
+  top: 0;
+  left: 0;
   opacity: 0;
   height: 100%;
   width: 100%;
+  -webkit-appearance: none;
 `
 
-const SelectWrapper = styled.div.attrs((props) => ({
-  tabIndex: 0,
-}))`
-  position: relative;
+const SelectWrapper = styled.div`
   height: 43px;
   background-color: ${COLORS.transparentGray15};
-  width: fit-content;
-  padding: 12px 16px;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
   color: ${COLORS.gray700};
 
-  &:hover {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+
+  ${RealSelect}:focus + & {
+    outline: 1px dotted #212121;
+    outline: 5px auto -webkit-focus-ring-color;
+  }
+  ${RealSelect}:hover + & {
     color: ${COLORS.black};
   }
 `
